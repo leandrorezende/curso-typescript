@@ -1,0 +1,273 @@
+|*****************************************************TypeScript****************************************************|
+	
+	TypeScript has the goal to help the developer to catch errors
+	
+	Typescript compiler
+		intalation:
+			npm install -g typescript ts-node
+			tsc --help
+		compile a .ts file:
+			tsc index.ts -->This will output a index.js file
+				to run a .js file using node: node index.js
+			a shortcut to compile and run is the following command
+				ts-node index.ts
+		
+	Interface in typescript is used to define the structure of an object
+	
+	Variables
+		Type Annotations
+		let apples: number = 5;
+		
+		Type Inference
+			let apples = 5; <= javaScript know but the context that apples is a number
+			let apples = 'five'; it'll show a compiler error, since the type variable of apples is number
+			type inference doesn't occurrs is case when declaration an allocate are not at the same setence
+			in this case will infer its the variable is of the type any
+				let apples;
+				apples = 5; => apples has type any
+		
+		Use Type Inference as much as whe possible can
+		But should use the Type Annotations at the following scenarios
+			* when a function returns the 'any' type and we need to clarify the value. Ex: const coordinates = JSON.parse(json); 
+			* when we declare a variable on one line then initialize it latter
+			* when we want a variable to have a type thatn can't be inferred
+		
+		Type Infenrece in function can occurrs when the app can read de function code de define by itself the result 
+		of the funcion, but we must always rely on annotations to describe as function
+		
+		Type Annotations in function you define explicity the return type of the function
+	
+	Arrays
+		but not declaring the type of the array and also initaling it, it will have the any type
+		const carMarkers = [];
+		declaring with type const carMarkers: string[] = [];
+		
+	Tuple - array like structure where each element represent some property of a record
+	
+	Classes
+		the default modifier of a method in a class is public 
+		the following code is responsible to declare a variable public e also create a constructor with color
+		as a parameter, the type of the modificer can be changed, otherwise the field wheels is not a filed became
+		a class field
+			constructor(private color:string, wheels:number) {}
+			
+			
+	Tool to help run TypeScript in the browser
+	npm install -g parcel-bundler
+	and then run
+	parcel index.html
+	
+	npm install faker
+	npm install @types/faker
+	
+	to make the class acessible use the export keywork
+		export class User{}
+		you can export as many classes or variables as you want
+		export const color = 'red'
+	from the other file you use 
+		import {User} from './folder';
+		import {User, color} from './folder';
+	
+	try to avoid default export
+	
+	type definitions files has the goal to help js understang how
+	third party js libraries or node modules works, for modules or js tags added
+	directly to our html file
+	for every time you need to use of a node module you have to install the type definition file
+	''' nm>npm install @types/node
+
+	
+	Every since you see a function with a parameter followed by a question
+	marker, it means its optional, like the following exemple
+	public showName(firstName:string, secondName?:string){
+	}
+	
+	Use an abuse of interface
+	Typical Typescript File
+		Inteface definitions for working with this class
+			and
+		Class definition
+	
+	In TypeScript getters can 
+	
+		private qtd:number;
+		
+		get qtd:number() {
+			return qtd;
+		}
+		this way you can access the variable value without use of ()
+		Ex: obj.qtd instead of obj.qtd()
+		
+
+	if(variable) --> this expression test for undefined also
+	
+	Interfaces - when to use
+		* Sets up a contract between different classes. Ex:User and Compaty, both have few in common 
+		* Use when we have very diffent object that we want to work together.
+		* Promotes loose coupling
+		
+	Inheritance/Abstract Classes - when to use
+		* Sets up a contract between diffent classes
+		* Use when we are trying to build up a definition of an object: Use a method of super class in a child one
+		* Strongly couples classes together
+	
+	Enum has the goal so signal to other engineers that this are very close releated values. An you ONLY make use of
+	when you know all the possible values when you are writing your code
+	
+	
+	TypeScript create a object intline as parameter
+	
+	class State {
+		public propertie1: string;
+		public propertie2: string;
+	}
+	
+	showProperties(state:State): void {
+		console.log(`The properties ares ${state.propertie1} and ${state.propertie2}`);
+	}
+	
+	showProperties({
+		propertie1: 'color',
+		propertie2: 'size'
+	})
+	
+	Favor componsition over Inheritance, that means we shold prefer
+	componse behavior of objects rather than by inheritance
+	
+	if the statement is undefined, i will assign an empty array to handlers
+	const handlers = this.events[eventName] || [];
+	
+	in typescript you can create a type of anything
+	Ex: 
+		type BestName = 'john';
+		const printName = (name: BestName): void => {
+		
+		};
+		printName('teste');  //invalid
+		printName('john');   //valid
+		
+		
+	user of get property:
+		every time that you are only retrieving information from a class
+		instead of calling it as a function, with the property get, yout 
+		can call it as it were a propertie as said
+		
+		get fullName(): string {
+			return `${this.firstName} ${this.lastName}`;
+		}
+		
+		this way, some other persons will undestand that this function only
+		returns values, doesn't make any change or operation.
+		
+		other example of use;
+		 // not trying to call a function, is return a reference to events.on method
+		get on() {
+			return this.events.on;
+		}
+		
+		
+    // Reminder on how 'this' works in javaScript
+	const colors = {
+		color: 'red',
+		printColor() {
+			console.log(this.color);
+		}
+	};
+	colors.printColor(); //prints 'red'
+	Só, every time you call 'this' in line 173, it'll refer to what is the most
+	left of the function printColor, that is this case is COLORS in line 176
+	
+	But, the next example will result at a error, since the most left of printColor
+	is nothing
+	
+	const printColor = colors.printColor();
+	printColor(); //error
+	
+	to avoid this situation, define printColor as an arrow function
+	const colors = {
+		color: 'red',
+		printColor = () => {
+			console.log(this.color);
+		}
+	};
+	
+	ShortCut for passthrought
+		on = this.events.on;
+		get on() {
+		  return this.events.on;
+		}
+		
+		This will only work if the initilization of the class variables happens 
+		the following way
+		constructor(
+			private events: Events
+		) {
+		}
+		
+		if it were this way won't work
+		constructor() {
+			this.events = new Events();
+		}
+	
+	Most of the times when you end up refactoring a class in a composition way
+	and the two classe need to have a reference to one and another, this most
+	seems to be a inheritance scenario.
+	
+	Composition high rely on Interfaces
+	Inheritance high rely on Abstract class
+	
+	When use of third party libraries, you shold install the type definition file
+	this way the error in the import statement will disappear
+	npm install @types/express @types/cookie-session @types/body-parser
+
+	
+	type definiton file tell us about the different properties a javaScript library
+	exposes to us
+	
+	
+	DECORATORS	
+	We can use Decorators on a property, method, accessor
+	the decorator function is to be called with a couple of arguments
+		* first argument is the prototype(is where js keep the functions) of the object
+		* second argument is the key of the property/argument/accessor on the object
+		* third argument is the property descriptor
+	Decorators are applied when the code for this class is ran(not when an instance
+	is created)
+	
+	PropertyDescriptor - is an object that has some configurations options around an property
+	defined at an object, in other words, is essentially an object that is meant to configure 
+	an property in another object
+	const car = {make = 'hond'};
+	Object.getOwnPropertyDescriptor(car, 'make');
+	// it will print the property writable, enumerable, configurable of the property make
+	Object.defineProperty(car, 'make', {writable: false});
+	// this instruction change the behavior that you can't change the property writable
+	
+	We can't read a property of a instance of a class by using decorator
+
+	
+	Metadata
+		Snippets of info that can be tied to a method, property, or class definition
+		Can be used for super custom stuff
+		
+		A metadata, as a piece of information attached to something, isn't visibled by a simple 
+		console.log 
+		It's is a reference to another object from the original reference
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
